@@ -11,6 +11,7 @@ struct RecipeFeaturedView: View {
     
     // Reference the view model
     @EnvironmentObject var model: RecipeModel
+    @State var selectedIndex = 0
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -21,7 +22,7 @@ struct RecipeFeaturedView: View {
                 .padding(.top, 40)
             
             GeometryReader { geo in
-                TabView {
+                TabView(selection: $selectedIndex) {
                     ForEach(0..<model.recipes.count) { index in
                         
                         let recipe = model.recipes[index]
@@ -47,24 +48,26 @@ struct RecipeFeaturedView: View {
                                     .frame(width: geo.size.width-40, height: geo.size.height-100, alignment: .center)
                                     .cornerRadius(15)
                                     .shadow(color: Color(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.5),radius: 10, x: -5, y: 5)
-                                
-                                VStack() {
-                                    Text("Preparation Time:")
-                                        .font(.headline)
-                                    Text(recipe.prepTime)
-                                    Text("Highlights")
-                                        .font(.headline)
-                                    Text(recipe.highlights.joined(separator: ", "))
-                                }
-                                
                             }
                         }
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .automatic))
+                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
             
             }
+            
+            VStack(alignment: .leading) {
+                let recipe = model.recipes[selectedIndex]
+                
+                Text("Preparation Time:")
+                    .font(.headline)
+                Text(recipe.prepTime)
+                Text("Highlights")
+                    .font(.headline)
+                Text(recipe.highlights.joined(separator: ", "))
+            }
+            .padding([.leading,.bottom])
             
         }
     }

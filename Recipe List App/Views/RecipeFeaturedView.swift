@@ -12,6 +12,7 @@ struct RecipeFeaturedView: View {
     // Reference the view model
     @EnvironmentObject var model: RecipeModel
     @State var selectedIndex = 0
+    @State var isDetailViewShowing = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -28,8 +29,11 @@ struct RecipeFeaturedView: View {
                         let recipe = model.recipes[index]
                         if recipe.featured {
                             
-                            VStack {
-                            
+                            Button(action: {
+                                isDetailViewShowing = true
+                            },
+                                   label: {
+                                
                                 ZStack {
                                     Rectangle()
                                         .foregroundColor(.white)
@@ -43,18 +47,22 @@ struct RecipeFeaturedView: View {
                                             .padding(5)
                                         
                                     }
-                                    
                                 }
-                                    .frame(width: geo.size.width-40, height: geo.size.height-100, alignment: .center)
-                                    .cornerRadius(15)
-                                    .shadow(color: Color(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.5),radius: 10, x: -5, y: 5)
-                            }
+                                
+                            })
+                                .sheet(isPresented: $isDetailViewShowing) {
+                                    RecipeDetailView(recipe: recipe)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                .frame(width: geo.size.width-40, height: geo.size.height-100, alignment: .center)
+                                .cornerRadius(15)
+                                .shadow(color: Color(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.5),radius: 10, x: -5, y: 5)
                         }
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
                 .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-            
+                
             }
             
             VStack(alignment: .leading) {

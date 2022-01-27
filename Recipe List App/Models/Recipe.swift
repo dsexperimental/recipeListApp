@@ -22,6 +22,12 @@ class Recipe: Identifiable, Decodable {
     var ingredients:[Ingredient]
     var directions:[String]
     
+    var highlightsString: String {
+        get {
+            highlights.joined(separator: ", ")
+        }
+    }
+    
 }
 
 class Ingredient: Identifiable, Decodable {

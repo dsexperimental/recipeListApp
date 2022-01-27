@@ -50,6 +50,7 @@ struct RecipeFeaturedView: View {
                                 }
                                 
                             })
+                                .tag(index)
                                 .sheet(isPresented: $isDetailViewShowing) {
                                     RecipeDetailView(recipe: recipe)
                                 }
@@ -73,11 +74,21 @@ struct RecipeFeaturedView: View {
                 Text(recipe.prepTime)
                 Text("Highlights")
                     .font(.headline)
-                Text(recipe.highlights.joined(separator: ", "))
+                Text(recipe.highlightsString)
             }
             .padding([.leading,.bottom])
             
         }
+        .onAppear(perform: {
+            setInitialIndex()
+        })
+    }
+    
+    
+    func setInitialIndex() {
+        selectedIndex = model.recipes.firstIndex { (recipe) -> Bool in
+            recipe.featured
+        } ?? 0
     }
 }
 
